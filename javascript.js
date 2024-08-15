@@ -2,9 +2,8 @@ const button = document.querySelector("#userInput");
 
 
 let input = 0;
-let row = 0;
-let column = 0;
-
+let row = 16;
+let column = 16;
 
 
 function promptUserInput () {
@@ -23,28 +22,14 @@ function promptUserInput () {
     }
 };
 
-
-// add event listener is wrong,
-// you are adding the return value 
-// of promptUserInput() as the callback to 
-// the event listener instaed of the function call itself
-// promptUserInput() is calling the function
-// () => promptUserInput() is an arrow function that calls
-//       the prompt function when the arrow function
-//       is called
-// i.e. you should pass to the addEventListener a function
-// for it to call
 button.addEventListener("click", () => promptUserInput());
     
 function createSquaresInRow() {
     for(let i = 0; i < column; i++) {
         const div = document.createElement("div");
         div.classList.add("square");
-        div.style.opacity = 0.0;
         container.appendChild(div);
-
-        // adding single mouseover event listener 
-        // to the single square
+        div.style.opacity = 0.1;
 
         gridSize(input, div);
         div.addEventListener("mouseover", () => {
@@ -58,32 +43,9 @@ function createRowsOfSquares() {
     for (let i = 0; i < row; i++) {
         createSquaresInRow();
     }
-
-    /*
-    // not good to loop 3 times
-    // (1x create squares, 1x set size, 1x add listeners) 
-    // (means triple the work, takes longer to execute)
-    // just add the event listeners every time a square is created
-    
-    const squares = document.querySelectorAll(".square");
-    squares.forEach(square => {
-        gridSize(input,square);
-    });
-
-    // just call multiple functions per event,
-    // no need to add multiple event listeners
-    // if they all happen when the same event
-    // is triggered
-    squares.forEach(square => {
-        square.addEventListener("mouseover", () => {
-            highlight(square);
-            increaseOpacity(square);
-        });   
-    });
-    */
-
-    // squares.forEach(square => increaseOpacity(square));
 }
+
+createRowsOfSquares();
 
 
 function highlight(target) {
@@ -92,17 +54,15 @@ function highlight(target) {
 }
 
 function increaseOpacity (target) {
-    // https://stackoverflow.com/questions/27166007/how-to-change-the-opacity-on-an-element-dynamically-using-javascript
-    
-    let currentOpacity = target.style.opacity;
+  if (target.style.opacity < 1) {
+    target.style.opacity = +target.style.opacity + 0.1; 
+  };
 
-    if(currentOpacity < 1.0) {
-        target.style.opacity = currentOpacity + 0.1;
-    }
 }
 
 function gridSize(input,target) {
     let currentFlexBasis = 100/row;
     target.style.flexBasis = `${currentFlexBasis}%`;
+    target.style.paddingTop = `${currentFlexBasis}%`;
 }
 
